@@ -28,6 +28,7 @@ var server = http.createServer(function (request, response) {
         response.statusCode = 200
         response.setHeader('Content-Type', 'text/json;charset=utf-8')
         response.setHeader('Access-Control-Allow-Origin', '*')
+        response.removeHeader('Date')
         var config = fs.readFileSync('./qiniu-key.json')
         config = JSON.parse(config)
 
