@@ -6,31 +6,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>管理页面</title>
-    <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
-        #container {
-            padding: 50px 80px;
-            border-radius: 20px;
-            border: 2px dashed #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 200px;
-            flex-direction: column;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/default.css">
 </head>
 
 <body>
-    <!-- 明明说默认是父元素，可是下面配置又说要个id，我也是醉了 -->
-    <div id="container">
-        <button id="pickfiles">上传文件</button>
-        <p>文件大小不能超过20M</p>
+    <div class="page">
+        <!-- 侧边栏 -->
+        <aside>
+            <div class="newSong">
+                新建歌曲
+            </div>
+            <ul class="songList">
+                <li>歌曲111</li>
+                <li>歌曲2</li>
+                <li>歌曲3333</li>
+                <li>歌曲4</li>
+                <li>歌曲5</li>
+                <li class="active">歌曲666666</li>
+                <li>歌曲7</li>
+                <li>歌曲8888</li>
+                <li>歌曲99</li>
+                <li>歌曲10</li>
+            </ul>
+            <div class="uploadArea">
+                <div id="uploadContainer" class="draggable">
+                    <div id="uploadButton" class="clickable">
+                        <p>点击或拖曳上传文件</p>
+                        <p>文件大小不能超过20M</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- 页面主要内容 -->
+        <main>
+            <form class="form">
+                <!-- label这种写法用了之后就不要用for属性了，不然会无效 -->
+                <div class="row">
+                    <label>歌名
+                        <input type="text">
+                    </label>
+                </div>
+                <div class="row">
+                    <label>歌手
+                        <input type="text">
+                    </label>
+                </div>
+                <div class="row">
+                    <label>外链
+                        <input type="text">
+                    </label>
+                </div>
+                <div class="row">
+                    <button type="submit">保存</button>
+                </div>
+            </form>
+        </main>
     </div>
+
     <div id="uploadStatus"></div>
+
+
+
+
+
+
+
+
+    <!-- script -->
     <script src="../node_modules/leancloud-storage/dist/av-min.js"></script>
     <script>
         var APP_ID = 'EW7p15qaeLM0ddatbHa0ORRR-gzGzoHsz';
@@ -48,7 +90,7 @@
         //引入Plupload 、qiniu.js后
         var uploader = Qiniu.uploader({
             runtimes: 'html5', //上传模式,依次退化
-            browse_button: 'pickfiles', //上传选择的点选按钮，**必需**
+            browse_button: 'uploadButton', //上传选择的点选按钮，**必需**
             uptoken_url: 'http://localhost:8888/uptoken', //Ajax请求upToken的Url，**强烈建议设置**（服务端提供）
             // uptoken : '', //若未指定uptoken_url,则必须指定 uptoken ,uptoken由其他程序生成
             // unique_names: true, // 默认 false，key为文件名。若开启该选项，SDK为自动生成上传成功后的key（文件名）。
@@ -56,12 +98,12 @@
             domain: 'http://otty6pwsj.bkt.clouddn.com/', //bucket 域名，下载资源时用到，**必需**
             // otty6pwsj.bkt.clouddn.com
             get_new_uptoken: false, //设置上传文件的时候是否每次都重新获取新的token
-            container: 'container', //上传区域DOM ID，默认是browser_button的父元素，
+            // container: 'uploadContainer', //上传区域DOM ID，默认是browser_button的父元素，
             max_file_size: '20mb', //最大文件体积限制
             // flash_swf_url: 'js/plupload/Moxie.swf', //引入flash,相对路径
             // max_retries: 3, //上传失败最大重试次数
             dragdrop: true, //开启可拖曳上传
-            drop_element: 'container', //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+            drop_element: 'uploadContainer', //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
             // chunk_size: '4mb', //分块上传时，每片的体积
             auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
             init: {
@@ -90,8 +132,8 @@
                     console.log(domain)
                     var response = JSON.parse(info.response);
                     var sourceLink = domain + response.key; //获取上传成功后的文件的Url
-                    uploadStatus.textContent = sourceLink+''+response.key
-                    // window.location.href= sourceLink
+                    uploadStatus.textContent = sourceLink + '' + response.key
+                    window.location.href= sourceLink
                 },
                 'Error': function (up, err, errTip) {
                     //上传出错时,处理相关的事情
