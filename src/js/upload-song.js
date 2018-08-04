@@ -60,7 +60,7 @@
                         var sourceLink = domain + response.key; //获取上传成功后的文件的Url
                         uploadStatus.textContent = sourceLink + '' + response.key
                         // window.location.href = sourceLink
-                        console.log({
+                        window.eventHub.emit('upload',{
                             link: sourceLink,
                             key: response.key
                         })
