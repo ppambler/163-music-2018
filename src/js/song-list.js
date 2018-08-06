@@ -8,7 +8,7 @@
                 <li>歌曲3333</li>
                 <li>歌曲4</li>
                 <li>歌曲5</li>
-                <li class="active">歌曲666666</li>
+                <li>歌曲666666</li>
                 <li>歌曲7</li>
                 <li>歌曲8888</li>
                 <li>歌曲99</li>
