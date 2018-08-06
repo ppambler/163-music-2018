@@ -17,6 +17,9 @@
         `,
         render(data) {
             $(this.el).html(this.template)
+        },
+        clearActive() {
+            $(this.el).find('.active').removeClass('active')
         }
     }
     let model = {}
@@ -28,6 +31,9 @@
             this.view = view
             this.model = model
             this.view.render(this.model.data)
+            window.eventHub.on('upload',()=>{
+                this.view.clearActive()
+            })
         }
     }
     controller.init(view,model)
