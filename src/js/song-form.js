@@ -10,7 +10,7 @@
                 <div class="row">
                     <label>歌名
                     </label>
-                    <input type="text" name="name" value='__key__'>
+                    <input type="text" name="name" value='__name__'>
                 </div>
                 <div class="row">
                     <label>歌手
@@ -20,7 +20,7 @@
                 <div class="row">
                     <label>外链
                     </label>
-                    <input type="text" name="url" value='__link__'> 
+                    <input type="text" name="url" value='__url__'> 
                 </div>
                 <div class="row actions">
                     <button type="submit">保存</button>
@@ -29,38 +29,82 @@
                 `,
         // 这个形参：ES6语法，若没有传data或者data为undefined，就默认执行data为一个空对象
         render(data = {}) {
-            let placeholders = ['key', 'link']
+            // **？：**这里的id
+            let placeholders = ['name', 'url', 'singer', 'id']
             let html = this.template
-            placeholders.map((string)=>{
-                html = html.replace(`__${string}__`,data[string] || '')
+            placeholders.map((string) => {
+                html = html.replace(`__${string}__`, data[string] || '')
             })
             $(this.el).html(html)
+        },
+        // **？：**这函数的作用？
+        reset() {
+            this.render({})
         }
     }
-    let model = {}
+    let model = {
+        data: {
+            name: '',
+            singer: '',
+            url: '',
+            id: ''
+        },
+        create(data) {
+            // 声明类型
+            var Song  = AV.Object.extend('Song');
+            // 新建对象
+            var song = new Song();
+            // 设置名称
+            song.set('name', data.name);
+            song.set('singer', data.singer);
+            song.set('url', data.url);
+            // **？：**为啥要返回呢？
+            return song.save().then((newSong)=> {
+                // **？：**我then回来的参数是啥？
+                console.log(newSong)
+                // **？：**这个解析赋值是怎样的呢？
+                let {id,attributes} = newSong
+                // **？：**这个assign的用法，和 「...」这个操作符？
+                Object.assign(this.data,{id,...attributes})
+            }, (error) => {
+                console.error(error);
+            });
+        }
+    }
     let controller = {
-        init(view,model) {
+        init(view, model) {
             this.view = view
             this.view.init()
             this.model = model
             this.view.render(this.model.data)
             this.bindEvents()
-            window.eventHub.on('upload',(data)=>{
-                this.view.render(data)
+            window.eventHub.on('upload', (data) => {
+                // **？：**为什么不直接把拿到的data直接作为参数render呢？
+                this.model.data = data 
+                this.view.render(this.model.data)
             })
         },
         bindEvents() {
-            this.view.$el.on('submit','form',(e)=>{
+            this.view.$el.on('submit', 'form', (e) => {
                 e.preventDefault()
                 let needs = 'name singer url'.split(' ')
                 let data = {}
-                needs.map((string)=>{
+                needs.map((string) => {
                     // find()基于调用它的DOM对象找到其后代
                     data[string] = this.view.$el.find(`[name="${string}"]`).val()
                 })
-                console.log(data)
+                // **？：**这里是更新到数据库的吧！
+                this.model.create(data).then(()=>{
+                    // 更新往数据，然后就把form里的数据给刷了
+                    this.view.reset()
+                    // 深拷贝的做法——对data深拷贝
+                    let string = JSON.stringify(this.model.data)
+                    let object = JSON.parse(string)
+                    // 这个时候data才可以作为发布的data
+                    window.eventHub.emit('create',object)
+                })
             })
         }
     }
-    controller.init(view,model)
+    controller.init(view, model)
 }

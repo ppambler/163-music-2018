@@ -61,8 +61,9 @@
                         uploadStatus.textContent = sourceLink + '' + response.key
                         // window.location.href = sourceLink
                         window.eventHub.emit('upload',{
-                            link: sourceLink,
-                            key: response.key
+                            // **？：**这个key要跟表单字段的name属性一一对应？
+                            url: sourceLink,
+                            name: response.key
                         })
                     },
                     'Error': function (up, err, errTip) {
