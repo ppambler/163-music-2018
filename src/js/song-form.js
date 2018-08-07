@@ -1,23 +1,26 @@
 {
     let view = {
         el: '.page > main',
+        init() {
+            this.$el = $(this.el)
+        },
         template: `
             <h1>新建歌曲</h1>
             <form class="form">
                 <div class="row">
                     <label>歌名
                     </label>
-                    <input type="text" value='__key__'>
+                    <input type="text" name="name" value='__key__'>
                 </div>
                 <div class="row">
                     <label>歌手
                     </label>
-                    <input type="text">
+                    <input type="text" name="singer">
                 </div>
                 <div class="row">
                     <label>外链
                     </label>
-                    <input type="text" value='__link__'> 
+                    <input type="text" name="url" value='__link__'> 
                 </div>
                 <div class="row actions">
                     <button type="submit">保存</button>
@@ -38,10 +41,24 @@
     let controller = {
         init(view,model) {
             this.view = view
+            this.view.init()
             this.model = model
             this.view.render(this.model.data)
+            this.bindEvents()
             window.eventHub.on('upload',(data)=>{
                 this.view.render(data)
+            })
+        },
+        bindEvents() {
+            this.view.$el.on('submit','form',(e)=>{
+                e.preventDefault()
+                let needs = 'name singer url'.split(' ')
+                let data = {}
+                needs.map((string)=>{
+                    // find()基于调用它的DOM对象找到其后代
+                    data[string] = this.view.$el.find(`[name="${string}"]`).val()
+                })
+                console.log(data)
             })
         }
     }

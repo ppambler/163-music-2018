@@ -14,12 +14,12 @@
         <!-- 侧边栏 -->
         <aside>
             <div class="newSong">
-                
+
             </div>
             <div id="songList-container">
 
             </div>
-            
+
             <div class="uploadArea">
                 <div id="uploadContainer" class="draggable">
                     <div id="uploadButton" class="clickable">
@@ -32,26 +32,18 @@
         </aside>
         <!-- 页面主要内容 -->
         <main>
-                            
+
         </main>
     </div>
 
     <!-- script -->
     <script src="../node_modules/leancloud-storage/dist/av-min.js"></script>
-    <script>
-        var APP_ID = 'EW7p15qaeLM0ddatbHa0ORRR-gzGzoHsz';
-        var APP_KEY = 'MdcjOMoD6okF7vxnElbm0Qbq';
-
-        AV.init({
-            appId: APP_ID,
-            appKey: APP_KEY
-        });
-    </script>
+    <script src="../src/js/initializers/av.js"></script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../vendors/moxie.js"></script>
     <script src="../node_modules/plupload/js/plupload.min.js"></script>
     <script src="../node_modules/qiniu-js/dist/qiniu.min.js"></script>
-   
+
     <!-- 从左到右，从上到下 -->
     <script src="./js/event-hub.js"></script>
     <script src="./js/new-song.js"></script>
