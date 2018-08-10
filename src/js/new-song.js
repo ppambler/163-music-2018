@@ -19,18 +19,19 @@
             // 在这里咩有用到this
             // 当你想忽视细节原理的时候，请把这里当做是click吧！
             // 即使data此时没有用到，也要添加形参
-            window.eventHub.on('upload',(data)=>{
+            window.eventHub.on('new',(data)=>{
                 // this的值会往上找，所以这是controller
                 this.active()
             })
             window.eventHub.on('select',(data)=>{
                 this.deactive()
             })
-            $(this.view.el).on('click',this.active.bind(this))
+            $(this.view.el).on('click',()=>{
+                window.eventHub.emit('new')
+            })
         },
         active() {
             $(this.view.el).addClass('active')
-            window.eventHub.emit('new')
         },
         deactive() {
             $(this.view.el).removeClass('active')

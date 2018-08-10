@@ -98,9 +98,6 @@
             })
         },
         bindEventHub() {
-            window.eventHub.on('upload', () => {
-                this.view.clearActive()
-            })
             window.eventHub.on('create', (songData) => {
                 // **？：**我拿到的数据是什么？其数据结构呢？
                 // console.log(`song-list-create:${songData}`)

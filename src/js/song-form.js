@@ -82,21 +82,24 @@
             this.model = model
             this.view.render(this.model.data)
             this.bindEvents()
-            window.eventHub.on('upload', (data) => {
-                // **？：**为什么不直接把拿到的data直接作为参数render呢？
-                this.model.data = data 
-                this.view.render(this.model.data)
-            })
             window.eventHub.on('select',(data)=>{
                 this.model.data = data
                 console.log(this.model.data)
                 this.view.render(this.model.data)
             })
-            window.eventHub.on('new',()=>{
-                // 清空表单数据
-                this.model.data = {
-                    name:'',url:'',id:'',singer:''
+            window.eventHub.on('new',(data)=>{
+                // 数据库已存在该数据，所以在表单有数据且该数据是有id的，那么就
+                // 清空
+                if(this.model.data.id){
+                     // 清空表单数据
+                    this.model.data = {
+                        name:'',url:'',id:'',singer:''
+                    }
+                }else {
+                    // 直接丢个空值，啥事也没干
+                    Object.assign(this.model.data,data)
                 }
+
                 // 老实说，Vue就不用自己render,一旦数据有变化，自己搞事情
                 this.view.render(this.model.data)
             })
