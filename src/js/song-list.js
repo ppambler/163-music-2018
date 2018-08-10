@@ -81,8 +81,20 @@
                 console.log(e.currentTarget)
                 console.log(e)
                 let songId = e.currentTarget.getAttribute('data-song-id')
+                // 一个临时变量,用于装载当前选中的这首歌的所有信息
+                let data
+                // 拿到当前model所有的数据，用来和选中的id搞事情
+                let songs = this.model.data.songs
+                for(let i = 0; i < songs.length; i++) {
+                    if(songs[i].id === songId) {
+                        data = songs[i]
+                        break
+                    }
+                }
                 //在这里数据都是用hash解决啊
-                window.eventHub.emit('select',{id:songId})
+                //做了深拷贝——序列化与反序列化的使用，对面的女孩，我们的数据保证是纯天然的
+                console.log(data)
+                window.eventHub.emit('select',JSON.parse(JSON.stringify(data)))
             })
         },
         bindEventHub() {

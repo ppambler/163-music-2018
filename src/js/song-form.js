@@ -15,7 +15,7 @@
                 <div class="row">
                     <label>歌手
                     </label>
-                    <input type="text" name="singer">
+                    <input type="text" name="singer" value='__singer__'>
                 </div>
                 <div class="row">
                     <label>外链
@@ -81,6 +81,11 @@
             window.eventHub.on('upload', (data) => {
                 // **？：**为什么不直接把拿到的data直接作为参数render呢？
                 this.model.data = data 
+                this.view.render(this.model.data)
+            })
+            window.eventHub.on('select',(data)=>{
+                this.model.data = data
+                console.log(this.model.data)
                 this.view.render(this.model.data)
             })
         },
