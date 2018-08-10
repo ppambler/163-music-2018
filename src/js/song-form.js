@@ -5,7 +5,6 @@
             this.$el = $(this.el)
         },
         template: `
-            <h1>新建歌曲</h1>
             <form class="form">
                 <div class="row">
                     <label>歌名
@@ -36,6 +35,11 @@
                 html = html.replace(`__${string}__`, data[string] || '')
             })
             $(this.el).html(html)
+            if(data.id) {
+                $(this.el).prepend("<h1>编辑歌曲</h1>")
+            } else {
+                $(this.el).prepend("<h1>新建歌曲</h1>")
+            }
         },
         // **？：**这函数的作用？
         reset() {
@@ -86,6 +90,14 @@
             window.eventHub.on('select',(data)=>{
                 this.model.data = data
                 console.log(this.model.data)
+                this.view.render(this.model.data)
+            })
+            window.eventHub.on('new',()=>{
+                // 清空表单数据
+                this.model.data = {
+                    name:'',url:'',id:'',singer:''
+                }
+                // 老实说，Vue就不用自己render,一旦数据有变化，自己搞事情
                 this.view.render(this.model.data)
             })
         },

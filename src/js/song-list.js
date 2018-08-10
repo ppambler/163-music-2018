@@ -63,8 +63,8 @@
             this.view = view
             this.model = model
             this.view.render(this.model.data)
-            this.bindEventHub()
             this.bindEvents()
+            this.bindEventHub()
             this.getAllSongs()
         },
         getAllSongs() {
@@ -108,6 +108,9 @@
                 this.model.data.songs.push(songData)
                 // **？：**现用现拿？
                 this.view.render(this.model.data)
+            })
+            window.eventHub.on('new',()=>{
+                this.view.clearActive()
             })
         }
     }
