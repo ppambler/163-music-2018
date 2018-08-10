@@ -109,6 +109,17 @@
             window.eventHub.on('new',()=>{
                 this.view.clearActive()
             })
+            window.eventHub.on('update',(song)=> {
+                // 注意数据是更新了，可是id是唯一的
+                // 如果id一致则更新一首歌曲的信息
+                let songs = this.model.data.songs
+                for (let i = 0; i < songs.length; i++) {
+                    if(songs[i].id === song.id) {
+                        Object.assign(songs[i],song)
+                    }
+                }
+                this.view.render(this.model.data)
+            })
         }
     }
     controller.init(view, model)
