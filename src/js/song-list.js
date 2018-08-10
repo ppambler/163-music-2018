@@ -34,6 +34,20 @@
         data: {
             // **？：**这个也叫songs的名字，和那个{songs}的联系？
             songs: []
+        },
+        find() {
+            var query = new AV.Query('Song');
+            console.log(query)
+            return query.find().then((songs) => {
+                this.data.songs = songs.map((song) => {
+                    // 这个id可是很重要的，当然在这里的find是批量获取,而不是get！id是用于获取单个对象实例了
+                    // 「...」你要的全拿走
+                    return {id: song.id, ...song.attributes}
+                })
+
+                // 拿到什么就返回什么，Promise的特点
+                return songs
+            })
         }
     }
     // 当我写到第3遍的时候发现，我只是把引用给你了
@@ -52,6 +66,9 @@
                 // console.log(`song-list-create:${songData}`)
                 this.model.data.songs.push(songData)
                 // **？：**现用现拿？
+                this.view.render(this.model.data)
+            })
+            this.model.find().then(() =>{
                 this.view.render(this.model.data)
             })
         }
