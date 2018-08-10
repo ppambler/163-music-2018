@@ -23,9 +23,15 @@
                 // this的值会往上找，所以这是controller
                 this.active()
             })
+            window.eventHub.on('select',(data)=>{
+                this.deactive()
+            })
         },
         active() {
             $(this.view.el).addClass('active')
+        },
+        deactive() {
+            $(this.view.el).removeClass('active')
         }
     }
     controller.init(view,model)    
