@@ -9,27 +9,28 @@
         render(data) {
             let $el = $(this.el)
             $el.html(this.template)
-            // **？：**我拿到的data是什么？
-            console.log(`song-list-view-render:${data}`)
-            let {
-                songs
-            } = data
+            console.log('song-list-view-render-data:')
+            console.log(data.songs)
+            let selectedSongId = data.selectedSongId
+            let songs = data.songs
             console.log(songs)
-            let liList = songs.map((song) =>
-                // **？：**可以这样用选择器吗？哪里来的li啊！
-                $('<li></li>').text(song.name).attr('data-song-id',song.id)
+            let liList = songs.map((song) =>{
+                    let $li = $('<li></li>').text(song.name).attr('data-song-id',song.id)
+                    if(song.id === selectedSongId) {
+                        $li.addClass('active')
+                    }
+                    return $li
+                }
             )
+            console.log(liList)
             // **？：**这为何意？清空？为何要这样做
             $el.find('ul').empty()
+
             liList.map((domLi) => {
                 // 难道之前的是创建个游离的li
+                
                 $el.find('ul').append(domLi)
             })
-        },
-        activeItem(li) {
-            let $li = $(li)
-            $li.addClass('active')
-                .siblings('.active').removeClass('active')
         },
         clearActive() {
             $(this.el).find('.active').removeClass('active')
@@ -38,18 +39,20 @@
     let model = {
         data: {
             // **？：**这个也叫songs的名字，和那个{songs}的联系？
-            songs: []
+            songs: [],
+            selectedSongId: undefined
         },
         find() {
             var query = new AV.Query('Song');
             console.log(query)
+            
             return query.find().then((songs) => {
                 this.data.songs = songs.map((song) => {
                     // 这个id可是很重要的，当然在这里的find是批量获取,而不是get！id是用于获取单个对象实例了
                     // 「...」你要的全拿走
                     return {id: song.id, ...song.attributes}
                 })
-
+                console.log(songs)
                 // 拿到什么就返回什么，Promise的特点
                 return songs
             })
@@ -77,10 +80,12 @@
             // 是作用到li元素身上的
             $(this.view.el).on('click','li',(e)=>{
                 // 能不要用this就不要用了！
-                this.view.activeItem(e.currentTarget)
                 console.log(e.currentTarget)
                 console.log(e)
                 let songId = e.currentTarget.getAttribute('data-song-id')
+                
+                this.model.data.selectedSongId = songId
+                this.view.render(this.model.data)
                 // 一个临时变量,用于装载当前选中的这首歌的所有信息
                 let data
                 // 拿到当前model所有的数据，用来和选中的id搞事情
