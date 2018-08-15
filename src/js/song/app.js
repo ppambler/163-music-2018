@@ -1,8 +1,30 @@
 {
-    let view = {}
+    let view = {
+        el: '#app',
+        // 由于我的歌曲地址有空格所有得要加个「」
+        template:`
+        <audio src='{{url}}'></audio>
+        <div>
+            <button id='play'>播放</button>
+            <button id='pause'>暂停</button>
+        </div>
+        `,
+        render(data) {
+            $(this.el).html(this.template.replace('{{url}}',data.url))
+        },
+        play() {
+            let audio = $(this.el).find('audio')[0]
+            // 没想到这个audio元素有play方法
+            audio.play()
+        },
+        pause() {
+            let audio = $(this.el).find('audio')[0]
+            audio.pause()
+        }
+    }
     let model = {
         data: {
-            id: '',
+            id: '', 
             name: '',
             singer: '',
             url: ''
@@ -22,7 +44,16 @@
             this.model = model
             let id = this.getSongId()
             this.model.get(id).then((song)=>{
-                console.log(this.model.data)
+                this.view.render(this.model.data)
+            })
+            this.bindEvents()
+        },
+        bindEvents(){
+            $(this.view.el).on('click','#play',(e)=>{
+                this.view.play()
+            })
+            $(this.view.el).on('click','#pause',(e)=>{
+                this.view.pause()
             })
         },
         getSongId() {
