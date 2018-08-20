@@ -1,38 +1,51 @@
 {
     let view = {
         el: '#app',
-        // 由于我的歌曲地址有空格所有得要加个「」
-        template:`
-        <audio src='{{url}}'></audio>
-        <div>
-            <button id='play'>播放</button>
-            <button id='pause'>暂停</button>
-        </div>
-        `,
         render(data) {
-            $(this.el).html(this.template.replace('{{url}}',data.url))
+            let {
+                song,
+                status
+            } = data
+            console.log(song)
+            console.log(status)
+            console.log(data)
+            $(this.el).css('background-image', `url(${song.cover})`)
+            $(this.el).find('img.cover').attr('src', song.cover)
+            // 暂停后再播放，歌曲还是连续的！
+            if ($(this.el).find('audio').attr('src') !== song.url) {
+                $(this.el).find('audio').attr('src', song.url)
+            }
+            if (status === 'playing') {
+                $(this.el).find('.disc-container').addClass('playing')
+            } else {
+                $(this.el).find('.disc-container').removeClass('playing')
+            }
         },
         play() {
-            let audio = $(this.el).find('audio')[0]
-            // 没想到这个audio元素有play方法
-            audio.play()
+            console.log($(this.el).find('audio')[0])
+            $(this.el).find('audio')[0].play()
         },
         pause() {
-            let audio = $(this.el).find('audio')[0]
-            audio.pause()
+            $(this.el).find('audio')[0].pause()
         }
     }
     let model = {
         data: {
-            id: '', 
-            name: '',
-            singer: '',
-            url: ''
+            song: {
+                id: '',
+                name: '',
+                singer: '',
+                url: ''
+            },
+            status: 'paused'
         },
         get(id) {
             var query = new AV.Query('Song');
-            return query.get(id).then((song)=> {
-                Object.assign(this.data,{id:song.id,...song.attributes})
+            return query.get(id).then((song) => {
+                Object.assign(this.data.song, {
+                    id: song.id,
+                    ...song.attributes
+                })
                 // 作为下个then的回调函数的参数
                 return song
             })
@@ -43,16 +56,21 @@
             this.view = view
             this.model = model
             let id = this.getSongId()
-            this.model.get(id).then((song)=>{
+            this.model.get(id).then((song) => {
+                console.log(this.model.data)
                 this.view.render(this.model.data)
             })
             this.bindEvents()
         },
-        bindEvents(){
-            $(this.view.el).on('click','#play',(e)=>{
+        bindEvents() {
+            $(this.view.el).on('click', '.icon-play', (e) => {
+                this.model.data.status = 'playing'
+                this.view.render(this.model.data)
                 this.view.play()
             })
-            $(this.view.el).on('click','#pause',(e)=>{
+            $(this.view.el).on('click', '.icon-pause', (e) => {
+                this.model.data.status = 'paused'
+                this.view.render(this.model.data)
                 this.view.pause()
             })
         },

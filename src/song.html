@@ -6,12 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>单曲-网易云</title>
+    <link rel="stylesheet" href="./css/song.css">
 </head>
 
 <body>
-    歌曲播放页面
-    <div id="app">
-        
+    <div class="page" id="app">
+        <audio src="#"></audio>
+        <div class="disc-container">
+            <img class="pointer" src="//otty6pwsj.bkt.clouddn.com/18-8-20/23790397.jpg" alt="">
+            <div class="disc">
+                <div class="icon-wrapper">
+                    <svg class="icon icon-play">
+                        <use xlink:href="#icon-play"></use>
+                    </svg>
+                    <div class="icon icon-pause">
+                    </div>
+                </div>
+                <img class="ring" src="//otty6pwsj.bkt.clouddn.com/18-8-20/1243203.jpg" alt="">
+                <img class="light" src="//otty6pwsj.bkt.clouddn.com/18-8-20/84108653.jpg" alt="">
+                <img src="//otty6pwsj.bkt.clouddn.com/18-8-20/73656501.jpg"
+                    alt="" class="cover">
+            </div>
+        </div>
+        <div class="song-description">
+            <h1>太平洋的风-胡德夫</h1>
+            <div class="lyric">
+                <div class="lines">
+
+                </div>
+            </div>
+        </div>
+        <div class="links">
+            <a href="#">打开</a>
+            <a class="main" href="#">下载</a>
+        </div>
     </div>
     <script src="//at.alicdn.com/t/font_395875_4hwrep7mypx8ncdi.js"></script>
     <script src="../node_modules/leancloud-storage/dist/av-min.js"></script>
