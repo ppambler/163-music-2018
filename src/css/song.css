@@ -32,11 +32,11 @@
 }
 
 .disc-container .icon-pause{display: none; }
-.disc-container .icon-pause::before{
+/* .disc-container .icon-pause::before{
     content: '.';
     display: block;
     visibility: hidden;
-}
+} */
 .disc-container.playing .icon-pause{display: block; }
 .disc-container.playing .icon-play{display: none; }
 

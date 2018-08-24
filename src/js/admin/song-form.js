@@ -26,6 +26,11 @@
                     </label>
                     <input type="text" name="cover" value='__cover__'> 
                 </div>
+                <div class="row">
+                    <label>歌词
+                    </label>
+                    <textarea cols=100 rows=10 name="lyrics">__lyrics__</textarea>
+                </div>
                 <div class="row actions">
                     <button type="submit">保存</button>
                 </div>
@@ -34,7 +39,7 @@
         // 这个形参：ES6语法，若没有传data或者data为undefined，就默认执行data为一个空对象
         render(data = {}) {
             // **？：**这里的id
-            let placeholders = ['name', 'url', 'singer', 'id', 'cover']
+            let placeholders = ['name', 'url', 'singer', 'id', 'cover', 'lyrics']
             let html = this.template
             placeholders.map((string) => {
                 html = html.replace(`__${string}__`, data[string] || '')
@@ -57,7 +62,8 @@
             singer: '',
             url: '',
             id: '',
-            cover: ''
+            cover: '',
+            lyrics: ''
         },
         update(data) {
             // debugger
@@ -68,6 +74,7 @@
             song.set('singer', data.singer);
             song.set('url', data.url);
             song.set('cover', data.cover);
+            song.set('lyrics', data.lyrics);
             // 保存到云端
             return song.save().then((response)=>{
                 Object.assign(this.data,data)
@@ -84,6 +91,7 @@
             song.set('singer', data.singer);
             song.set('url', data.url);
             song.set('cover', data.cover);
+            song.set('lyrics', data.lyrics);
             // **？：**为啥要返回呢？
             return song.save().then((newSong) => {
                 // **？：**我then回来的参数是啥？
@@ -136,7 +144,7 @@
             })
         },
         create(){
-            let needs = 'name singer url cover'.split(' ')
+            let needs = 'name singer url cover lyrics'.split(' ')
             let data = {}
             needs.map((string) => {
                 // find()基于调用它的DOM对象找到其后代
@@ -154,7 +162,7 @@
             })
         },
         update(){
-            let needs = 'name singer url cover'.split(' ')
+            let needs = 'name singer url cover lyrics'.split(' ')
             let data = {}
             needs.map((string) => {
                 // find()基于调用它的DOM对象找到其后代
