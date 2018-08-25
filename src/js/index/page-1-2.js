@@ -45,7 +45,7 @@
             this.data.songs = songs.map((song) => {
                 // 这个id可是很重要的，当然在这里的find是批量获取,而不是get！id是用于获取单个对象实例了
                 // 「...」你要的全拿走
-                return {id: song.id, ...song.attributes}
+                return Object.assign({id: song.id}, song.attributes)
             })
             // 拿到什么就返回什么，Promise的特点
             return songs
